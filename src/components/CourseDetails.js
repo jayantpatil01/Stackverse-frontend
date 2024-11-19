@@ -9,7 +9,7 @@ const CourseDetails = () => {
   const handlePayment = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/api/payment/order`,
+        `${process.env.REACT_APP_API_BASE_URL}/payment/order`,
         {}, // Pass the request body here if needed
         { headers: { "Content-Type": "application/json" } }
       );
@@ -35,9 +35,11 @@ const CourseDetails = () => {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
-      alert(error.message);
+      console.error(error);
+      alert("Payment request failed. Please try again.");
     }
   };
+  
   
   
 
