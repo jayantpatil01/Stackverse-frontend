@@ -2,21 +2,20 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/Coursedetails.css";
+import axios from "axios";
 
 const CourseDetails = () => {
+
   const handlePayment = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/payment/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create order. Please try again.");
-      }
-
-      const { order } = await response.json();
-
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/api/payment/order`,
+        {}, // Pass the request body here if needed
+        { headers: { "Content-Type": "application/json" } }
+      );
+  
+      const { order } = response.data;
+  
       const options = {
         key: "rzp_test_eSqWr31Os1klce",
         amount: order.amount,
@@ -26,19 +25,21 @@ const CourseDetails = () => {
         order_id: order.id,
         handler: function (response) {
           alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-          window.location.href = "/sucess"; // Redirect to success page
+          window.location.href = "/success";
         },
         theme: {
           color: "#1e90ff",
         },
       };
-
+  
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error) {
       alert(error.message);
     }
   };
+  
+  
 
   return (
     <>
